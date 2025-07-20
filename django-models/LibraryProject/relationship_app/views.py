@@ -34,8 +34,8 @@ def register_view(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Log the user in after registration
-            return redirect('home')  # Redirect to a home page
+            login(request, user)  # Automatically log in after registration
+            return redirect('home')  # Replace 'home' with your actual landing page name
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
