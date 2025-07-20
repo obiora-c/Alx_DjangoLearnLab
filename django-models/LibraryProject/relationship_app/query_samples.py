@@ -23,12 +23,17 @@ except Library.DoesNotExist:
     print(f"Library '{library_name}' not found.")
 
 
-# Query: All books by a specific author
+
+# ✅ Query: All books by a specific author (using required code lines)
 author_name = "Jane Doe"
-books_by_author = Book.objects.filter(author__name=author_name)
-print(f"Books by {author_name}:")
-for book in books_by_author:
-    print(f"- {book.title}")
+try:
+    author = Author.objects.get(name=author_name)  # ✅ Required line
+    books_by_author = Book.objects.filter(author=author)  # ✅ Required line
+    print(f"\nBooks by {author_name}:")
+    for book in books_by_author:
+        print(f"- {book.title}")
+except Author.DoesNotExist:
+    print(f"Author '{author_name}' not found.")
 
 
 # Query: Retrieve the librarian for a library
