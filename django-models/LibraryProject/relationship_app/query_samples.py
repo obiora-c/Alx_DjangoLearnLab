@@ -36,9 +36,11 @@ except Author.DoesNotExist:
     print(f"Author '{author_name}' not found.")
 
 
+
 # Query: Retrieve the librarian for a library
 try:
-    librarian = Librarian.objects.get(librarys=library)
+    library = Library.objects.get(name=library_name)
+    librarian = Librarian.objects.get(library=library)  # ✅ Required line
     print(f"\nLibrarian of {library_name}: {librarian.name}")
-except Librarian.DoesNotExist:
+except (Library.DoesNotExist, Librarian.DoesNotExist):
     print(f"No librarian found for library '{library_name}'.")
