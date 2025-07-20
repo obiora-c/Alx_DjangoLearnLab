@@ -70,23 +70,26 @@ def member_view(request):
 
 # relationship_app/views.py
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import permission_required
-from django.contrib.auth.decorators import permission_required
-from .models import Book
-from .forms import BookForm  # assuming you have a ModelForm for Book
+# LibraryProject/relationship_app/views.py
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import permission_required  # ✅ Add this line
+from .models import Book
+from .forms import BookForm  # Ensure you have a BookForm defined
+
+# ✅ View to add a book — requires 'can_add_book' permission
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('book_list')  # or your desired success URL
+            return redirect('book_list')
     else:
         form = BookForm()
     return render(request, 'relationship_app/book_form.html', {'form': form})
 
+# ✅ View to edit a book — requires 'can_change_book' permission
 @permission_required('relationship_app.can_change_book', raise_exception=True)
 def edit_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
@@ -94,11 +97,12 @@ def edit_book(request, pk):
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
-            return redirect('book_detail', pk=book.pk)
+            return redirect('book_list')
     else:
         form = BookForm(instance=book)
     return render(request, 'relationship_app/book_form.html', {'form': form})
 
+# ✅ View to delete a book — requires 'can_delete_book' permission
 @permission_required('relationship_app.can_delete_book', raise_exception=True)
 def delete_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
