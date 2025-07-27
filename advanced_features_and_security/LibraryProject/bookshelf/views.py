@@ -56,44 +56,18 @@ def book_delete(request, pk):
 
 
 
-from django.shortcuts import render
-from django.db.models import Q
-from .models import MyModel  # Replace with your actual model
-
-def search(request):
-    query = request.GET.get('q', '')
-    results = MyModel.objects.filter(name__icontains=query)
-    return render(request, 'search_results.html', {'results': results, 'query': query})
 
 
 
 from django.shortcuts import render
-from .models import MyModel  # Replace with your actual model
-from .forms import SearchForm  # This should be defined in forms.py
+from .forms import ExampleForm
 
-def safe_search(request):
-    if request.method == 'GET':
-        form = SearchForm(request.GET)
+def example_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
         if form.is_valid():
-            query = form.cleaned_data['q']
-            results = MyModel.objects.filter(name__icontains=query)
-            return render(request, 'search_results.html', {'results': results, 'form': form})
+            # process form data
+            pass
     else:
-        form = SearchForm()
-    return render(request, 'search.html', {'form': form})
-
-
-
-
-from django.shortcuts import render
-from .models import Book
-from .forms import SearchForm
-
-def book_list(request):
-    form = SearchForm(request.GET or None)
-    books = Book.objects.all()
-    if form.is_valid():
-        title = form.cleaned_data.get('title')
-        if title:
-            books = books.filter(title__icontains=title)
-    return render(request, 'bookshelf/book_list.html', {'books': books, 'form': form})
+        form = ExampleForm()
+    return render(request, 'example_template.html', {'form': form})
