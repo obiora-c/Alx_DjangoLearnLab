@@ -81,3 +81,19 @@ def safe_search(request):
     else:
         form = SearchForm()
     return render(request, 'search.html', {'form': form})
+
+
+
+
+from django.shortcuts import render
+from .models import Book
+from .forms import SearchForm
+
+def book_list(request):
+    form = SearchForm(request.GET or None)
+    books = Book.objects.all()
+    if form.is_valid():
+        title = form.cleaned_data.get('title')
+        if title:
+            books = books.filter(title__icontains=title)
+    return render(request, 'bookshelf/book_list.html', {'books': books, 'form': form})
