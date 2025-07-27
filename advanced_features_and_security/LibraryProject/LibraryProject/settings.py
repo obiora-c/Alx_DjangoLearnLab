@@ -123,3 +123,39 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+
+
+
+
+
+
+
+
+# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY SETTINGS
+
+# Prevent the browser from attempting to guess the content type
+# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production!
+# Security settings to protect against common vulnerabilities
+
+SECURE_BROWSER_XSS_FILTER = True  # Enables browser XSS filter
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevents MIME sniffing
+
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disabling framing
+
+CSRF_COOKIE_SECURE = True  # Send CSRF cookie only over HTTPS
+SESSION_COOKIE_SECURE = True  # Send session cookie only over HTTPS
+
+
+
+
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('search/', views.search, name='search'),
+]
