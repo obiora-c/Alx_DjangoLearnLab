@@ -151,26 +151,25 @@ SESSION_COOKIE_SECURE = True  # Send session cookie only over HTTPS
 
 
 
-
-
-
-
-# Enforce HTTPS by redirecting all HTTP requests to HTTPS
+# Enforce HTTPS across the entire site by redirecting HTTP requests to HTTPS
 SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 
-# HTTP Strict Transport Security (HSTS) settings
-SECURE_HSTS_SECONDS = 31536000  # One year in seconds
+# HTTP Strict Transport Security (HSTS) — tell browsers to only use HTTPS for the next year
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
-SECURE_HSTS_PRELOAD = True  # Allow domain to be included in browser preload list
+SECURE_HSTS_PRELOAD = True  # Allow domain to be preloaded in browsers' HSTS list
 
-# Secure cookies (ensure cookies are only sent over HTTPS)
+# Secure cookies: only send cookies over HTTPS connections
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-# Security headers to protect against common attacks
-X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing
-SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME type sniffing
-SECURE_BROWSER_XSS_FILTER = True  # Enable browser's XSS protection filter
+# Security headers
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing of your site
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing
+SECURE_BROWSER_XSS_FILTER = True  # Enable the browser’s XSS filter
+
+
+
 
 
 
