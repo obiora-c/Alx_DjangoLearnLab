@@ -153,9 +153,34 @@ SESSION_COOKIE_SECURE = True  # Send session cookie only over HTTPS
 
 
 
+
+
+# Enforce HTTPS by redirecting all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+
+# HTTP Strict Transport Security (HSTS) settings
+SECURE_HSTS_SECONDS = 31536000  # One year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow domain to be included in browser preload list
+
+# Secure cookies (ensure cookies are only sent over HTTPS)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Security headers to protect against common attacks
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by disallowing framing
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME type sniffing
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser's XSS protection filter
+
+
+
+
+
+
 from django.urls import path
 from . import views
 
 urlpatterns = [
     path('search/', views.search, name='search'),
 ]
+
