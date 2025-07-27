@@ -48,3 +48,36 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'bookshelf/book_confirm_delete.html', {'book': book})
+
+
+
+
+
+
+
+
+from django.shortcuts import render
+from django.db.models import Q
+from .models import MyModel  # Replace with your actual model
+
+def search(request):
+    query = request.GET.get('q', '')
+    results = MyModel.objects.filter(name__icontains=query)
+    return render(request, 'search_results.html', {'results': results, 'query': query})
+
+
+
+from django.shortcuts import render
+from .models import MyModel  # Replace with your actual model
+from .forms import SearchForm  # This should be defined in forms.py
+
+def safe_search(request):
+    if request.method == 'GET':
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['q']
+            results = MyModel.objects.filter(name__icontains=query)
+            return render(request, 'search_results.html', {'results': results, 'form': form})
+    else:
+        form = SearchForm()
+    return render(request, 'search.html', {'form': form})
