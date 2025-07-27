@@ -49,25 +49,29 @@ class CustomUser(AbstractUser):
 # app/models.py
 # advanced_features_and_security/models.py
 
+# LibraryProject/bookshelf/models.py
+
+# LibraryProject/bookshelf/models.py
+
 from django.db import models
-from django.conf import settings
-from django.contrib.auth.models import User
+from django.conf import settings  # ✅ Correct import
 
-class Article(models.Model):
+class Book(models.Model):
     title = models.CharField(max_length=255)
-    content = models.TextField()
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    published = models.BooleanField(default=False)
+    author = models.CharField(max_length=255)
+    added_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # ✅ Use dynamic user model
+        on_delete=models.CASCADE
+    )
+    published_date = models.DateField(null=True, blank=True)
 
     class Meta:
         permissions = [
-            ("can_view", "Can view article"),
-            ("can_create", "Can create article"),
-            ("can_edit", "Can edit article"),
-            ("can_delete", "Can delete article"),
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
         ]
 
     def __str__(self):
         return self.title
-
