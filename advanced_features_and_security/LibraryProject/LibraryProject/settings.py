@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-eh_d^n#hq*#))g)_*hgd$pytig65&sg9h-v9c9m%&#(i)rb*9u'
+SECRET_KEY = 'django-insecure-t#!vghi=*(=*v70s)6wh+$(9ac945l99+4448gpyq=gqzm3q^l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts'
+    'bookshelf'
 ]
 
 MIDDLEWARE = [
@@ -119,14 +119,7 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-# Add 'accounts' to INSTALLED_APPS
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Set custom user model
-AUTH_USER_MODEL = 'accounts.CustomUser'
-
-from accounts.models import CustomUser
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
