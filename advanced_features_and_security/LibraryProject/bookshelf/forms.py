@@ -11,8 +11,11 @@ class ArticleForm(forms.ModelForm):
         fields = ['title', 'content', 'published']
 
 
+# LibraryProject/bookshelf/forms.py
 
 from django import forms
 
-class SearchForm(forms.Form):
-    title = forms.CharField(required=False, max_length=100)
+class ExampleForm(forms.Form):
+    # Define your form fields here
+    name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(required=True)
