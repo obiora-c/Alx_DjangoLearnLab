@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^4x@3g6u#+i7(whkf0jwdsjsk7((6c_gl#g-5#ul7qm%+m(y3m'
+SECRET_KEY = 'django-insecure-)dc-$tlh1#dgr)ukmkk-!-&gb9)ycs^@xp&bh@p^6u3ztpy1qo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog'
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'django_blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,6 +78,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'Lavida_1',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -118,10 +130,18 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Global static folder (optional)
-]
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # For production use
+
+
+
+# Static files (CSS, JavaScript, Images)
+#STATIC_URL = '/static/'
+
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "static"),  # global static directory (optional)
+#]
+
+#STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # for production collectstatic
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
