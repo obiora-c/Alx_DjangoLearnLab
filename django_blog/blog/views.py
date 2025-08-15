@@ -10,8 +10,13 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-from .models import Post
+from .models import Post, Comment
 from .forms import PostForm
+
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import UpdateView, DeleteView
+from .forms import CommentForm
+
 
 
 
@@ -81,3 +86,51 @@ class PostDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "Post deleted.")
         return super().delete(request, *args, **kwargs)
+
+
+
+# Add comment
+##   post = get_object_or_404(Post, id=post_id)
+ #   if request.method == "POST":
+  #      form = CommentForm(request.POST)
+   #     if form.is_valid():
+    #        comment = form.save(commit=False)
+     #       comment.post = post
+      #      comment.author = request.user
+       #     comment.save()
+  #          return redirect('post-detail', pk=post.pk)
+   # else:
+    #    form = CommentForm()
+   # return redirect('post-detail', pk=post.pk)
+
+
+
+
+# Edit comment
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
+
+# Delete comment
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return self.object.post.get_absolute_url()
