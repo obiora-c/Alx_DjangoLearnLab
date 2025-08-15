@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}{% endblock %}
+{% block content %}
+<h1 class="mb-3">{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    {{ form.title }}
+    {{ form.title.errors }}
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Content</label>
+    {{ form.content }}
+    {{ form.content.errors }}
+  </div>
+  <button type="submit" class="btn btn-success">
+    {% if form.instance.pk %}Save Changes{% else %}Create Post{% endif %}
+  </button>
+  <a href="{% if form.instance.pk %}{% url 'post-detail' form.instance.pk %}{% else %}{% url 'post-list' %}{% endif %}"
+     class="btn btn-outline-secondary">Cancel</a>
+</form>
+{% endblock %}
