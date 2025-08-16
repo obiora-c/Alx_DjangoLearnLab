@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Post
 from .models import Comment
+from taggit.forms import TagWidget  # <-- this is what you’re missing!
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -20,6 +21,9 @@ class PostForm(forms.ModelForm):
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control", "placeholder": "Post title"}),
             "content": forms.Textarea(attrs={"class": "form-control", "rows": 8, "placeholder": "Write your post..."}),
+        }
+        widgets = {
+            "tags": TagWidget(),  # makes tags input cleaner
         }
 
 
