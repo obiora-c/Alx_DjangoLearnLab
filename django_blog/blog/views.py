@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 from .forms import PostForm
 
 from django.shortcuts import get_object_or_404, redirect
@@ -50,14 +50,7 @@ class PostListView(ListView):
     paginate_by = 5
 
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        tag_slug = self.kwargs.get("tag_slug")  # e.g., /tags/django/
-        if tag_slug:
-            queryset = Post.objects.filter(tags__slug=tag_slug)  # <-- here’s the filter
-        return queryset   
-   
-    
+
 
 class PostDetailView(DetailView):
     model = Post
@@ -162,3 +155,20 @@ def search_posts(request):
             Q(tags__name__icontains=query)  # taggit supports this
         ).distinct()
     return render(request, "blog/search_results.html", {"results": results, "query": query})
+
+
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = "blog/post_by_tag.html"   # create this template
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get("tag_slug")
+        self.tag = get_object_or_404(Tag, slug=tag_slug)
+        return Post.objects.filter(tags__slug=tag_slug).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.tag
+        return context
