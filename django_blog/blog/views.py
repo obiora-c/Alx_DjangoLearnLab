@@ -49,6 +49,16 @@ class PostListView(ListView):
     context_object_name = "posts"
     paginate_by = 5
 
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        tag_slug = self.kwargs.get("tag_slug")  # e.g., /tags/django/
+        if tag_slug:
+            queryset = Post.objects.filter(tags__slug=tag_slug)  # <-- here’s the filter
+        return queryset   
+   
+    
+
 class PostDetailView(DetailView):
     model = Post
     template_name = "blog/post_detail.html"
