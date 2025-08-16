@@ -16,6 +16,7 @@ from .forms import PostForm
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import UpdateView, DeleteView
 from .forms import CommentForm
+from django.urls import reverse
 
 
 
@@ -89,20 +90,19 @@ class PostDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
 
 
 
-@login_required
-def add_comment(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            return redirect("post-detail", pk=post.pk)
-    else:
-        form = CommentForm()
-    return render(request, "blog/comment_form.html", {"form": form, "post": post})
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def form_valid(self, form):
+        post = Post.objects.get(pk=self.kwargs['post_id'])
+        form.instance.post = post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("post-detail", kwargs={"pk": self.object.post.pk})
 
 
 
