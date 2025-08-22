@@ -3,18 +3,18 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 
-User = get_user_model()
+CustomUser = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'username', 'email', 'bio', 'profile_picture']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField()
     
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email', 'password']
         
 
@@ -33,5 +33,5 @@ class PublicUserSerializer(serializers.ModelSerializer):
     following_count = serializers.IntegerField(source='following.count', read_only=True)
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'username', 'bio', 'profile_picture', 'followers_count', 'following_count']

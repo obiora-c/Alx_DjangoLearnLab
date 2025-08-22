@@ -11,12 +11,13 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from .serializers import PublicUserSerializer
+from .models import CustomUser
 
 
-User = get_user_model()
+CustomUser = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = RegisterSerializer
 
 class LoginView(generics.GenericAPIView):
