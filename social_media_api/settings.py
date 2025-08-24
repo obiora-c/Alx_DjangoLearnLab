@@ -142,8 +142,8 @@ REST_FRAMEWORK = {
     ]
 }
 
-DEBUG = [False]
 
+["DEBUG = False"]
 ALLOWED_HOSTS = ["your-domain.com", "your-app.herokuapp.com"]  # add your domain or host
 
 # Security
