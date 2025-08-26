@@ -151,8 +151,8 @@ REST_FRAMEWORK = {
 }
 
 
-["DEBUG = False"]
-ALLOWED_HOSTS = ["your-domain.com", "your-app.herokuapp.com"]  # add your domain or host
+#["DEBUG = False"]
+#ALLOWED_HOSTS = ["your-domain.com", "your-app.herokuapp.com"]  # add your domain or host
 
 # Security
 SECURE_BROWSER_XSS_FILTER = True
