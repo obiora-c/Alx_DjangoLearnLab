@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-&jlo9wue##hat)1oohimpsllotd$+^(fi8-)hirauy+qqam2c(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["yourapp.herokuapp.com", "localhost", "127.0.0.1"]
+import os
+ALLOWED_HOSTS = ["social_media_api.onrender.com"]
 
 
 # Application definition
@@ -55,9 +56,16 @@ MIDDLEWARE = [
     
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # add this
+     # add this
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", 
+    # ... other middleware
 ]
+    
+
 
 ROOT_URLCONF = 'social_media_api.urls'
+
 
 TEMPLATES = [
     {
@@ -164,3 +172,6 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "/static/"
+
+
+
