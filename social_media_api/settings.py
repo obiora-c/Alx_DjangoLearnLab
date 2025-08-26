@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&jlo9wue##hat)1oohimpsllotd$+^(fi8-)hirauy+qqam2c(
 DEBUG = False
 
 import os
-ALLOWED_HOSTS = ["social_media_api.onrender.com"]
+ALLOWED_HOSTS = ["social-media-api-k0ry.onrender.com"]
 
 
 # Application definition
@@ -56,9 +56,8 @@ MIDDLEWARE = [
     
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # add this
-     # add this
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
+     
+
     # ... other middleware
 ]
     
