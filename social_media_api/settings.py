@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&jlo9wue##hat)1oohimpsllotd$+^(fi8-)hirauy+qqam2c(
 DEBUG = False
 
 import os
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = ["social-media-api-ns6j.onrender.com"]
 
 
 
