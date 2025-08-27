@@ -26,14 +26,11 @@ SECRET_KEY = 'django-insecure-&jlo9wue##hat)1oohimpsllotd$+^(fi8-)hirauy+qqam2c(
 DEBUG = False
 
 import os
-ALLOWED_HOSTS = ["social-media-api-k0ry.onrender.com"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
 
-import os
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = os.environ.get("DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+
 
 
 
@@ -170,9 +167,6 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 
-import os
-
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 
 
