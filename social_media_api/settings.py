@@ -177,3 +177,8 @@ STATIC_URL = "/static/"
 
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+import os
+
+# Default port (useful for local dev), overwritten in production by hosting provider
+PORT = int(os.environ.get("PORT", 8000))
