@@ -174,7 +174,10 @@ CSRF_COOKIE_SECURE = True
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "/static/"
 
-import os
+
 
 # Default port (useful for local dev), overwritten in production by hosting provider
+
+import os
 PORT = int(os.environ.get("PORT", 8000))
+
