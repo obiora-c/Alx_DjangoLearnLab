@@ -10,44 +10,46 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import os
+from pathlib import Path
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load .env only in development
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+from dotenv import load_dotenv
+load_dotenv()
 
-# SECURITY WARNING: keep the secret key used in production secret!
-
-
-# SECURITY WARNING: don't run with debug turned on in production!
-
+# Load environment variables from the .env file at the project root
+load_dotenv(dotenv_path=BASE_DIR / '.env')
 
 
-from decouple import config
+# Environment variables
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = config('DEBUG', cast=bool)
-ALLOWED_HOSTS = ["social-media-api-ns6j.onrender.com"]
+ALLOWED_HOSTS = ['social-media-api-ns6j.onrender.com']
 
-SECRET_KEY = config('SECRET_KEY')
 
+import dj_database_url
+import os
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),  # Render sets this automatically
+        conn_max_age=600,  # Keep database connections open
+        ssl_require=True   # Ensure secure connection
+    )
 }
 
 
-# Application definition
 
+
+
+
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,27 +57,28 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'rest_framework.authtoken',
+
+    # 3rd-party
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',  # Optional, for frontend communication
+
+    # Your apps
     'accounts',
     'posts',
-    'notifications'
+    'notifications',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Optional
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # add this
-     
-
 ]
 
 ROOT_URLCONF = 'social_media_api.urls'
@@ -90,6 +93,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -97,87 +101,58 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Database (PostgreSQL)
 
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
+# Static files
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+# Optional WhiteNoise dev setting
+WHITENOISE_AUTOREFRESH = DEBUG
 
-STATIC_URL = 'static/'
+# Media files (if needed)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+# REST framework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5,  # adjust as needed
-    'DEFAULT_FILTER_BACKENDS': [
-        'rest_framework.filters.SearchFilter',
-    ]
+    'PAGE_SIZE': 5,
+    'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.SearchFilter'],
 }
 
-# Security
+# Security settings
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_SSL_REDIRECT = True   # redirect all HTTP → HTTPS
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 
 
-
-
-
-
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_URL = "/static/"
-
-
-
-# Default port (useful for local dev), overwritten in production by hosting provider
-
-import os
-PORT = int(os.environ.get("PORT", 8000))
 
