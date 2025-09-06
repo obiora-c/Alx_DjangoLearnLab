@@ -14,9 +14,4 @@ router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'users', UserViewSet, basename='user')
 
 
-#urlpatterns = [
-#    path('api/', include(router.urls)),
-    
-#]
-
 urlpatterns = router.urls

@@ -28,30 +28,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 import os
 
-
-#SECRET_KEY = os.environ.get('SECRET_KEY', 'unsafe-default')
-from decouple import config
-
-
-DEBUG = config('DEBUG', cast=bool)
-ALLOWED_HOSTS = ['e-commerce-api-jfus.onrender.com', ]
+from dotenv import load_dotenv
+load_dotenv() 
 
 
-SECRET_KEY = config('SECRET_KEY')
+#environment variable
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALLOWED_HOSTS = ['e-commerce-api-jfus.onrender.com'] 
+
+
+import dj_database_url
+import os
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),  # Render sets this automatically
+        conn_max_age=600,  # Keep database connections open
+        ssl_require=True   # Ensure secure connection
+    )
+}
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
-    }
-}
+
 
 # Application definition
 
@@ -67,10 +71,12 @@ INSTALLED_APPS = [
         'products',
     
     'django_extensions',
+    'rest_framework_simplejwt',
     
      # Third-party
      'rest_framework',
      'django_filters',
+     'rest_framework.authtoken',
 
 ]
 
@@ -157,12 +163,33 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,  # adjust as needed
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
 }
+
 
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media files (if needed)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+# Security settings
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG

@@ -51,4 +51,4 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser]  # Only admin can CRUD users
+    permission_classes = [permissions.AllowAny]  # For registration      [permissions.IsAdminUser]  # Only admin can CRUD users
