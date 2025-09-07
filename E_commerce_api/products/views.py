@@ -17,7 +17,7 @@ from rest_framework import viewsets, permissions
 
 
 from .permissions import IsAdminOrReadOnly
-permission_classes = [IsAdminOrReadOnly]
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
