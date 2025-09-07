@@ -20,7 +20,6 @@ from .permissions import IsAdminOrReadOnly
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminOrReadOnly]
     queryset = Product.objects.select_related('category').all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -44,7 +43,6 @@ class ProductViewSet(viewsets.ModelViewSet):
         return Response({'id': product.id, 'stock_quantity': product.stock_quantity})
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAdminOrReadOnly]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -53,4 +51,4 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes =  [permissions.IsAdminUser]  # Only admin can CRUD users # [permissions.AllowAny]  # For registration      [permissions.IsAdminUser]  # Only admin can CRUD users
+    permission_classes =   [permissions.AllowAny]  # For registration    # [permissions.IsAdminUser]  # Only admin can CRUD users # [permissions.AllowAny]  # For registration      [permissions.IsAdminUser]  # Only admin can CRUD users
